@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[24]:
+# In[1]:
 
 
 # Import Splinter and BeautifulSoup
@@ -10,21 +10,27 @@ from bs4 import BeautifulSoup as soup
 import pandas as pd
 
 
-# In[25]:
+# In[2]:
 
 
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-# In[26]:
+# In[5]:
+
+
+get_ipython().system('which chromedriver')
+
+
+# In[6]:
 
 
 # Set the executable path and initialize the chrome browser in splinter
-executable_path = {'executable_path': ChromeDriverManager().install()}
+executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
 browser = Browser('chrome', **executable_path, headless=False)
 
 
-# In[27]:
+# In[7]:
 
 
 # Visit the mars nasa news site
@@ -34,7 +40,7 @@ browser.visit(url)
 browser.is_element_present_by_css("ul.item_list li.slide", wait_time=1)
 
 
-# In[5]:
+# In[8]:
 
 
 html = browser.html
@@ -42,13 +48,13 @@ news_soup = soup(html, 'html.parser')
 slide_elem = news_soup.select_one('ul.item_list li.slide')
 
 
-# In[6]:
+# In[9]:
 
 
 slide_elem.find("div", class_='content_title')
 
 
-# In[7]:
+# In[10]:
 
 
 # Use the parent element to find the first `a` tag and save it as `news_title`
@@ -56,17 +62,17 @@ news_title = slide_elem.find("div", class_='content_title').get_text()
 news_title
 
 
-# In[8]:
+# In[11]:
 
 
 # Use the parent element to find the paragraph text
-news_p = slide_elem.find('div', class_="article_teaser_body").get_text()
-news_p
+news_paragraph = slide_elem.find('div', class_="article_teaser_body").get_text()
+news_paragraph
 
 
 # ### Featured Images
 
-# In[9]:
+# In[12]:
 
 
 # Visit URL
@@ -91,7 +97,7 @@ browser.visit(url)
 #more_info_elem.click()
 
 
-# In[10]:
+# In[13]:
 
 
 #10.3.4
@@ -107,25 +113,7 @@ except:
     print('https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/pia22486-main.jpg')
 
 
-# In[20]:
-
-
-# Visit Archived JPL URL
-#PREFIX = "https://web.archive.org/web/20181114023740"
-#url = f'{PREFIX}/https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
-#browser.visit(url)
-#WAIT FOR THE PAGE TO COMPLETELY LOAD!!!🥃
-
-
-# In[21]:
-
-
-#article = browser.find_by_tag('article').first['style']
-#article_background = article.split("_/")[1].replace('");',"")
-#print(f'{PREFIX}_if/{article_background}')
-
-
-# In[11]:
+# In[14]:
 
 
 df = pd.read_html('http://space-facts.com/mars/')[0]
@@ -134,13 +122,13 @@ df.set_index('description', inplace=True)
 df
 
 
-# In[12]:
+# In[15]:
 
 
 df.to_html()
 
 
-# In[13]:
+# In[16]:
 
 
 #browser.quit()
@@ -148,7 +136,7 @@ df.to_html()
 
 # ### Mars Weather
 
-# In[14]:
+# In[17]:
 
 
 # Visit the weather website
@@ -156,7 +144,7 @@ url = 'https://mars.nasa.gov/insight/weather/'
 browser.visit(url)
 
 
-# In[15]:
+# In[18]:
 
 
 # Parse the data
@@ -164,7 +152,7 @@ html = browser.html
 weather_soup = soup(html, 'html.parser')
 
 
-# In[16]:
+# In[19]:
 
 
 # Scrape the Daily Weather Report table
@@ -176,7 +164,7 @@ print(weather_table.prettify())
 
 # ### Hemispheres
 
-# In[28]:
+# In[20]:
 
 
 # 1. Use browser to visit the URL 
@@ -184,7 +172,7 @@ url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=tar
 browser.visit(url)
 
 
-# In[31]:
+# In[21]:
 
 
 # 2. Create a list to hold the images and titles.
@@ -224,13 +212,13 @@ for i in range(image_count):
     browser.back()
 
 
-# In[32]:
+# In[22]:
 
 
 hemisphere_image_urls
 
 
-# In[33]:
+# In[23]:
 
 
 # 5. Quit the browser
